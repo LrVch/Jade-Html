@@ -1,0 +1,77 @@
+//- социальные иконки 
+//- +socials('social', {vk:'в контакте', fb:'фэйсбук', tw:'твиттер'})
+mixin socials(className, items)
+  div(class= className)   
+    ul(class= className + "__list")
+      each item, index in items
+        li(class= className + "__item")
+          a(href="#" class= className + "__link " + className + "__link--" + index  title= item)= item   
+           
+//- навигация
+//- +nav('navigation', ['Главная', 'Новости', "О компании", "Сравнение"], 2)
+mixin nav(className, items, activeIndex)
+  nav(class= className)  
+    div(class= className + "__inner")
+      ul(class= className + "__list")
+        each item, index in items
+          li(class=className + "__item")
+            a(href="#" class= className + "__link " + ((activeIndex == index) ? className + '__link' + '--active' : ''))= item
+     
+//- простой список с сылками
+//- +links('links', ['Главная', 'Новости', "О компании", "Сравнение"])
+mixin links(className, links)
+  div(class= className)
+    ul(class= className + "__list")
+      each link in links
+        li(class= className + "__item")
+          a(href="#" class= className + "__link")= link  
+          
+//- простой список с сылками и активным пунктом
+//- +linksActive('links', ['Главная', 'Новости', "О компании", "Сравнение"], 1)
+mixin linksActive(className, links, activeIndex)
+  div(class= className)
+    ul(class= className + "__list")
+      each link, index in links
+        li(class= className + "__item")
+          a(href="#" class= className + "__link " + ((activeIndex == index) ? className + '__link' + '--active' : ''))= link 
+          
+//- breadcrumbs с разделителем ">" и поледний пункт ссылка
+//- +breadcrumbsA('breadcrumbs', ['Главная', 'Новости', "О компании"], 2)
+mixin breadcrumbsA(className, items, activeIndx)
+  div(class= className)  
+    ul(class= className + "__list")
+      each item, index in items
+        li(class=className + "__item")
+          a(href="#" class= className + "__link " + ((items.length == index + 1) ? className + '__link' + '--active' : ''))= (items.length == index + 1) ? item : item + " >"
+          
+//- breadcrumbs с разделителем ">" и поледний пункт спан  
+//- +breadcrumbs('breadcrumbs', ['Главная', 'Новости', "О компании"], 2)
+mixin breadcrumbs(className, items, activeIndx)
+  div(class= className)  
+    ul(class= className + "__list")
+      each item, index in items
+        - if (index != items.length - 1)
+            li(class= className + "__item")
+              a(href="#" class= className + "__link")= (items.length == index + 1) ? item : item + " >" 
+        - else       
+            li(class= className + "__item")
+              span(class= className + "__link " + className + '__link' + '--active')= item
+              
+//- table
+//- +table("className", {typeSim: ["Тип SIM-карты", "Micro-SIM"], typeSim: ["Тип SIM-карты", "Micro-SIM"]})
+mixin table(className, data)
+  table(class= className)
+    each tr in data
+      tr(class= className + "-tr")
+        each td in tr
+          td(class= className + "-td")= td
+
+
+//- +form()
+mixin form(className, action, method, inputs)
+  form(class=className action=action method=method)
+    each attr, typeInput in inputs
+      each name, type in attr
+        div(class=className + "__groupe")
+          label(class=className + "__label" for=name)
+          #{typeInput}(class=className + "__input" type=type name=name id=name) 
