@@ -73,3 +73,9 @@ $clrs: (
   // Violet
      violet: #808
 );
+
+$screen-lg: "only screen and (min-width: 1200px)";
+$screen-md: "only screen and (min-width: 992px)";
+$screen-sm: "only screen and (min-width: 768px)";
+$screen-ex: "only screen and (min-width: 480px)";
+$retina: "(min-resolution: 144dpi), (min-resolution: 1.5 dppx)";

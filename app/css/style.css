@@ -132,3 +132,12 @@ footer {
   padding: 0;
   box-sizing: border-box;
 }
+
+.page-header {
+  background: #000;
+}
+@media only screen and (min-width: 1200px) {
+  .page-header {
+    background: #f00;
+  }
+}
