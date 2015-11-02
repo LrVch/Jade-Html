@@ -144,7 +144,7 @@ gulp.task("server", ["compass", "autoprefixer", "jade"], function () {
 gulp.task("local-host", ["compass", "autoprefixer", "jade"], function () {
 
   browserSync.init({
-    proxy: "catalog/app"
+    proxy: "projectName/app"
   });
 
   //gulp.watch(RS_CONF.path.scssDir, ["sass"]);
