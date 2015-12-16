@@ -1,19 +1,22 @@
-$container-width: 1100px;
+﻿$container-width: 1100px;
+$body-width: 1200px;
 $footer-padding-top: 35px;
 $footer-padding-bottom: 0px;
 $footer-height: 225px;
-$hedaer-width: 1200px;
+$hedaer-width: 1200px; 
 //===============================================
 html,
 body {
-  min-width: $container-width + 20px; // ��� �������� �����������
+  min-width: $body-width; // для адаптива закоментить
+  //min-width: $hedaer-width; // для адаптива закоментить
+  height: 100%;
   min-height: 100%;
   margin: 0;
   padding: 0;
   font-family: $font-base-family;
   font-size: $font-base-size;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing: grayscale; 
 }
 
 html {
@@ -21,8 +24,18 @@ html {
 }
 
 body {
+  
+}
+
+.wrapper {
+  position: relative;
+  min-height: 100%;
+}
+
+.maincontent {
   padding-bottom: $footer-height;
 }
+
 
 %container {
   width: $container-width;
@@ -34,9 +47,16 @@ body {
 }
 
 %header {
-  max-width: $hedaer-width;
-  padding: 0 10px;
+  //max-width: $hedaer-width;
+  //width: $hedaer-width;
   margin: 0 auto;
+}
+
+%header-fix {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
 footer {

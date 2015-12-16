@@ -1,7 +1,7 @@
 include ../_common/_mixins
  
 doctype html
-html
+html.no-js
   head
     meta(charset="utf-8")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
@@ -27,17 +27,18 @@ html
     title 
       block title
  
-  body
+  body(class="" + ((background) ? background : ""))
+    block oldBrowser
+    //block herosection	
     .wrapper
       .maincontent
-        include ../_blocks/_header    
+        block header    
         .content
           .content__inner
             block content
+      block footer
           
-    include ../_blocks/_footer
-    
-    
+
     //- скрипты 
     // build:js js/vendor.min.js 
     script(src="")
