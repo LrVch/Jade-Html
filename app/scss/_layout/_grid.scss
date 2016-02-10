@@ -1,6 +1,6 @@
-.row {
-  @extend %clearfix;
-}
+// .row {
+//   @extend %clearfix;
+// }
 
 //.col {
 //  float: left;
@@ -12,8 +12,8 @@
 //$i: 12;
 //$col: 12;
 //@while $i > 0 {
-//  .s-#{$i} { 
-//    width: $container-width / $col * $i; 
+//  .s-#{$i} {
+//    width: $container-width / $col * $i;
 //  }
 //  $i: $i - 1;
 //}
@@ -21,25 +21,25 @@
 // генераор процентных колонок
 //$n: 12;
 //@for $i from 1 through $n {
-//  .s-#{$i} { 
-//    width: ($i * 100% / $n); 
+//  .s-#{$i} {
+//    width: ($i * 100% / $n);
 //  }
 //}
 //=================================================
-.small-col {
-  float: left;
-  width: 333px;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  //@extend %debug;
-}
+// .small-col {
+//   float: left;
+//   width: 333px;
+//   margin: 0;
+//   padding: 0;
+//   box-sizing: border-box;
+//   //@extend %debug;
+// }
 
-.big-col {
-  float: right;
-  width: 743px;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  //@extend %debug;
-}
+// .big-col {
+//   float: right;
+//   width: 743px;
+//   margin: 0;
+//   padding: 0;
+//   box-sizing: border-box;
+//   //@extend %debug;
+// }

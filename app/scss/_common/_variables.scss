@@ -3,8 +3,8 @@ $legacy-support-for-ie6: false;
 $legacy-support-for-ie7: false;
 $legacy-support-for-ie8: false;
 $inline-block-alignment: top;
-   
- 
+
+
 // font fase
 $font-family-regular: "open_sansregular", Arial, Helvetica, Garuda, sans-serif;
 $font-family-semibold: "open_sanssemibold", Arial, Helvetica, Garuda, sans-serif;
@@ -15,35 +15,38 @@ $font-base-family: $font-family-regular;
 
 // font size
 $font-base-size: 14px;
-$font-size-extra-small: 12px;
-$font-size-regular-small: 16px;
-$font-size-regular: 18px;
-$font-size-regular-big: 20px;
-//$font-size-big: 24px;
-$font-base-size-unit: 18px;
+// $font-size-extra-small: 12px;
+// $font-size-regular-small: 16px;
+// $font-size-regular: 18px;
+// $font-size-regular-big: 20px;
+// $font-size-big: 24px;
+// $font-base-size-unit: 18px;
+
 
 //font style
-$font-style-italic: italic;  
+$font-style-italic: italic;
 
 
 // font width
+$weight-light: 300;
 $weight-normal: 400;
 $weight-semi-bold: 600;
 $weight-bold: 700;
-  
+$weight-extra-bold: 800;
+
+
 // paths
 $dir: "../img";
 $dirIc: "../img/icons";
-   
 
 // colors
-$clrs: ( 
+$clrs: (
   // White
      white: #fff,
   // Silver
      silver: #c0c0c0,
   // Grey
-     gray: #808080,
+     grey: #808080,
   // Black
      black: #000,
   // Red

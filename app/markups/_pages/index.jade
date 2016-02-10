@@ -1,20 +1,28 @@
 extends ../_templates/main
 
-block title  
+
+block title
   | title
+  - var body_bg = "bg-style";
+
+block svg
+  include ../_blocks/_svg
 
 block oldBrowser
   +oldBrowser
-   
-//block herosection
 
-block header    
+block herosection
+  -var herosection = "red";
+  include ../_blocks/_herosection
+  -var herosection = "blue";
+  include ../_blocks/_herosection
+
+block header
   include ../_blocks/_header
-   
-block content 
-  | content 
+
+block content
+  | content
   //include ../_blocks/_block-name
 
 block footer
-  include ../_blocks/_footer   
-  
+  include ../_blocks/_footer

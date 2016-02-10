@@ -16,6 +16,7 @@
       jsDir: baseDir + "/js/*.js",
       htmlDir: baseDir + "/*.html",
       fontsDir: baseDir + "/fonts/*",
+      bootstrapFontsDir: baseDir + "/fonts/bootstrap/*",
       imgDir: baseDir + "/img/**/*",
       imgDestDir: baseDir + "/img/",
       bowerDir: baseDir + "/bower",
@@ -32,6 +33,7 @@
       distCssDir: distBaseDir + "/css/",
       distJsDir: distBaseDir + "/js/",
       distFontsDir: distBaseDir + "/fonts/",
+      distBootstrapFontsDir: distBaseDir + "/fonts/bootstrap/",
       distImgDir: distBaseDir + "/img/",
       distDelDir: [distBaseDir + "/**", "!" + distBaseDir],
       allDistFiles: distBaseDir + "/**/*"

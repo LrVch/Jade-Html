@@ -1,7 +1,13 @@
 // common blocks
 //===============================================
-@import "compass";  // подключается компас
-//@import "_common/_normalize";  
+
+@import "compass";  // подключается компас если надо создавать спрайты или компилировать им
+
+// bootstrap
+@import "_bootstrap/_bootstrap_custom";
+// => END bootstrap
+
+//@import "_common/_normalize";
 @import "_common/_variables";
 @import "_common/_mixins";
 @import "_common/_helpers";
@@ -11,8 +17,10 @@
 @import "_components/_oldbrowser";
 @import "_layout/_base";
 @import "_layout/_grid";
+// => END common
+
 // project blocks
 //===============================================
+@import "_blocks/_herosection";
 @import "_blocks/_header";
-@import "_blocks/_footer"; 
-//@import "_blocks/_block-name";  
+@import "_blocks/_footer";

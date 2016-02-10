@@ -1,16 +1,16 @@
-//- социальные иконки 
+//- социальные иконки
 //- +socials('social', {vk:'в контакте', fb:'фэйсбук', tw:'твиттер'})
 mixin socials(className, items)
-  div(class= className)   
+  div(class= className)
     ul(class= className + "__list")
       each item, index in items
         li(class= className + "__item")
-          a(href="#" class= className + "__link " + className + "__link--" + index  title= item)= item   
-           
+          a(href="#" class= className + "__link " + className + "__link--" + index  title= item)= item
+
 //- навигация
 //- +nav('navigation', ['Главная', 'Новости', "О компании", "Сравнение"], 2)
 mixin nav(className, items, activeIndex)
-  nav(class= className)  
+  nav(class= className)
     div(class= className + "__inner")
       ul(class= className + "__list")
         each item, index in items
@@ -20,13 +20,13 @@ mixin nav(className, items, activeIndex)
 //- навигация для magic-line
 //- +nav('navigation', ['Главная', 'Новости', "О компании", "Сравнение"], 2)
 mixin nav(className, items, activeIndex)
-  nav(class= className)  
+  nav(class= className)
     div(class= className + "__inner")
       ul(class= className + "__list")
         each item, index in items
           li(class=className + "__item " + ((activeIndex == index) ? className + '__item' + '--active' : ''))
             a(href="#" class= className + "__link " + ((activeIndex == index) ? className + '__link' + '--active' : ''))= item
-     
+
 //- простой список с сылками
 //- +links('links', ['Главная', 'Новости', "О компании", "Сравнение"])
 mixin links(className, links)
@@ -34,8 +34,8 @@ mixin links(className, links)
     ul(class= className + "__list")
       each link in links
         li(class= className + "__item")
-          a(href="#" class= className + "__link")= link  
-          
+          a(href="#" class= className + "__link")= link
+
 //- простой список с сылками и активным пунктом
 //- +linksActive('links', ['Главная', 'Новости', "О компании", "Сравнение"], 1)
 mixin linksActive(className, links, activeIndex)
@@ -43,7 +43,7 @@ mixin linksActive(className, links, activeIndex)
     ul(class= className + "__list")
       each link, index in links
         li(class= className + "__item")
-          a(href="#" class= className + "__link " + ((activeIndex == index) ? className + '__link' + '--active' : ''))= link 
+          a(href="#" class= className + "__link " + ((activeIndex == index) ? className + '__link' + '--active' : ''))= link
 
 //- простой список с сылками и активным пунктом и кастомным добавочным классом
 //- +linksActiveChoise('filter', [[["divans",'Диваны'],["Диваны", "Диваны"]], ["armchairs", 'Кресла'], ["tables", "Столы"], ["chairs", "Стулья"], ["mebel", 'Мебель для столовой']], 1, [1, 3], "narrow")
@@ -61,25 +61,25 @@ mixin linksActiveChoise(className, linksArr, activeIndex, choiseArr, choiseClass
 //- breadcrumbs с разделителем ">" и поледний пункт ссылка
 //- +breadcrumbsA('breadcrumbs', ['Главная', 'Новости', "О компании"], 2)
 mixin breadcrumbsA(className, items, activeIndx)
-  div(class= className)  
+  div(class= className)
     ul(class= className + "__list")
       each item, index in items
         li(class=className + "__item")
           a(href="#" class= className + "__link " + ((items.length == index + 1) ? className + '__link' + '--active' : ''))= (items.length == index + 1) ? item : item + " >"
-          
-//- breadcrumbs с разделителем ">" и поледний пункт спан  
+
+//- breadcrumbs с разделителем ">" и поледний пункт спан
 //- +breadcrumbs('breadcrumbs', ['Главная', 'Новости', "О компании"], 2)
 mixin breadcrumbs(className, items, activeIndx)
-  div(class= className)  
+  div(class= className)
     ul(class= className + "__list")
       each item, index in items
         - if (index != items.length - 1)
             li(class= className + "__item")
-              a(href="#" class= className + "__link")= (items.length == index + 1) ? item : item + " >" 
-        - else        
+              a(href="#" class= className + "__link")= (items.length == index + 1) ? item : item + " >"
+        - else
             li(class= className + "__item")
               span(class= className + "__link " + className + '__link' + '--active')= item
-              
+
 //- table
 //- +table("className", {typeSim: ["Тип SIM-карты", "Micro-SIM"], typeSim: ["Тип SIM-карты", "Micro-SIM"]})
 mixin table(className, data)
@@ -96,5 +96,5 @@ mixin oldBrowser
     strong устарел
     | . Пожалуйста 
     a(href="http://browserhappy.com/" target="_blank") обновите 
-    | его  
+    | его
   <![endif]-->
