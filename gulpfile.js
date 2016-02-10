@@ -72,7 +72,6 @@ gulp.task('bootlint', function() {
     }));
 });
 
-
 // sass
 // ******************************************************
 gulp.task("sass", function () {
@@ -97,61 +96,50 @@ gulp.task('autoprefixer', function () {
 // wiredep
 // ******************************************************
 gulp.task("wiredep-bower", function () {
-  gulp.src("./app/markups/*.jade")
+  gulp.src("./app/markups/_templates/*.jade")
     .pipe(wiredep({
       directory: RS_CONF.path.bowerDir,
-      // jade: {
-      //   block: /(([ \t]*)\/\/\s*bower:*(\S*))(\n|\r|.)*?(\/\/\s*endbower)/gi,
-      //   detect: {
-      //     js: /script\(.*src=['"]([^'"]+)/gi,
-      //     css: /link\(.*href=['"]([^'"]+)/gi
-      //   },
-      //   replace: {
-      //     js: 'script(src=\'{{filePath}}\')',
-      //     css: 'link(rel=\'stylesheet\', href=\'{{filePath}}\')'
-      //   }
-      // },
-      // overrides: {
-      //   "qtip2": {
-      //     "main": ["./jquery.qtip.min.js", "./jquery.qtip.min.css"],
-      //     "dependencies": {
-      //       "jquery": ">=1.6.0"
-      //     }
-      //   },
-      //   "bootstrap-sass": {
-      //     "main": [
-      //       // "./assets/javascripts/bootstrap/collapse.js",
-      //       // "./assets/javascripts/bootstrap/transition.js",
-      //       // "./assets/javascripts/bootstrap/scrollspy.js",
-      //       "./assets/javascripts/bootstrap/modal.js",
-      //       // "./assets/javascripts/bootstrap/tooltip.js"
-      //     ]  // подключение bootstrap js в html
-      //   },
-      //   "formstone": {
-      //     "main": [
-      //       // "./dist/js/core.js",
-      //       // "./dist/js/number.js",
-      //       // "./dist/css/number.css",
-      //     ]
-      //   },
-      //   "jquery.inputmask": {
-      //     "main": [
-      //       // "./dist/inputmask/inputmask.js",
-      //       // "./dist/inputmask/inputmask.extensions.js",
-      //       // "./dist/inputmask/jquery.inputmask.js",
-      //     ]
-      //   },
-      //   "select2": {
-      //     "main": [
-      //       // "dist/js/select2.js",
-      //       // "dist/css/select2.css"
-      //     ],
-      //   }
-      // },
+      overrides: {
+        "qtip2": {
+          "main": ["./jquery.qtip.min.js", "./jquery.qtip.min.css"],
+          "dependencies": {
+            "jquery": ">=1.6.0"
+          }
+        },
+        "bootstrap-sass": {
+          "main": [
+            // "./assets/javascripts/bootstrap/collapse.js",
+            // "./assets/javascripts/bootstrap/transition.js",
+            // "./assets/javascripts/bootstrap/scrollspy.js",
+            // "./assets/javascripts/bootstrap/modal.js",
+            // "./assets/javascripts/bootstrap/tooltip.js"
+          ]  // подключение bootstrap js в html
+        },
+        "formstone": {
+          "main": [
+            // "./dist/js/core.js",
+            // "./dist/js/number.js",
+            // "./dist/css/number.css",
+          ]
+        },
+        "jquery.inputmask": {
+          "main": [
+            // "./dist/inputmask/inputmask.js",
+            // "./dist/inputmask/inputmask.extensions.js",
+            // "./dist/inputmask/jquery.inputmask.js",
+          ]
+        },
+        "select2": {
+          "main": [
+            // "dist/js/select2.js",
+            // "dist/css/select2.css"
+          ],
+        }
+      },
       exclude: ["bower/modernizr/", "bower/normalize-css"],  //если надо включить модернизр удали его от сюда
       ignorePath: /^(\.\.\/)*\.\./
     }))
-    .pipe(gulp.dest("./app/markups"));
+    .pipe(gulp.dest("./app/markups/_templates"));
 });
 
 // spritesmith
@@ -210,7 +198,7 @@ gulp.task('compass', function () {
 
 // browsersync front-end
 // ******************************************************
-gulp.task("server", ["compass", "autoprefixer", "jade", "bootlint"], function () {
+gulp.task("server", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootlint"], function () {
 
   browserSync.init({
     port: 9000,
@@ -222,7 +210,7 @@ gulp.task("server", ["compass", "autoprefixer", "jade", "bootlint"], function ()
   });
 
   //gulp.watch(RS_CONF.path.scssDir, ["sass"]);
-  //gulp.watch("bower.json", ["wiredep-bower"]); // пока не используется
+  gulp.watch("bower.json", ["wiredep-bower"]); // пока не используется
   gulp.watch(RS_CONF.path.jadeLocation, ["jade"]);
   gulp.watch(RS_CONF.path.scssDir, ["compass"]);
   gulp.watch(RS_CONF.path.cssDir, ["autoprefixer"]).on("change", browserSync.reload);
@@ -232,14 +220,14 @@ gulp.task("server", ["compass", "autoprefixer", "jade", "bootlint"], function ()
 
 // browsersync local-host
 // ******************************************************
-gulp.task("local-host", ["compass", "autoprefixer", "jade", "bootlint"], function () {
+gulp.task("local-host", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootlint"], function () {
 
   browserSync.init({
     proxy: "projectName/app"
   });
 
   //gulp.watch(RS_CONF.path.scssDir, ["sass"]);
-  //gulp.watch("bower.json", ["wiredep-bower"]);  // пока не используется
+  gulp.watch("bower.json", ["wiredep-bower"]);  // пока не используется
   gulp.watch(RS_CONF.path.jadeLocation, ["jade"]);
   gulp.watch(RS_CONF.path.scssDir, ["compass"]);
   gulp.watch(RS_CONF.path.cssDir, ["autoprefixer"]).on("change", browserSync.reload);
@@ -356,7 +344,7 @@ gulp.task("size-app", function () {
 
 // Сборка и вывод размера папки DIST
 // ******************************************************
-gulp.task("dist", ["useref", "images", "fonts", "bootstrapFonts", "extras", "size-app"], function () {
+gulp.task("dist", ["useref", "images", "fonts", "bootstrapFonts", "extras", "php", "size-app"], function () {
   return gulp.src(RS_CONF.path.allDistFiles).pipe(size({
     title: "DIST size: "
   }));
@@ -364,12 +352,12 @@ gulp.task("dist", ["useref", "images", "fonts", "bootstrapFonts", "extras", "siz
 
 // Собираем папку DIST - только когда файлы готовы
 // ******************************************************
-gulp.task("build", ["clean-dist"], function () {
+/*gulp.task("build", ["clean-dist"], function () {
   gulp.start("dist");
-});
-/*gulp.task("build", ["clean-dist", "wiredep-bower"], function () {
-  gulp.start("dist");  // с wiredep-bower
 });*/
+gulp.task("build", ["clean-dist", "wiredep-bower"], function () {
+  gulp.start("dist");  // с wiredep-bower
+});
 
 
 // * ====================================================== *
