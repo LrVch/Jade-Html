@@ -3,7 +3,7 @@ extends ../_templates/main
 
 block title
   | title
-  - var body_bg = "bg-style";
+  //- var body_bg = "bg-style";
 
 block svg
   include ../_blocks/_svg
@@ -12,9 +12,6 @@ block oldBrowser
   +oldBrowser
 
 block herosection
-  -var herosection = "red";
-  include ../_blocks/_herosection
-  -var herosection = "blue";
   include ../_blocks/_herosection
 
 block header
