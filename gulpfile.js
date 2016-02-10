@@ -97,50 +97,61 @@ gulp.task('autoprefixer', function () {
 // wiredep
 // ******************************************************
 gulp.task("wiredep-bower", function () {
-  return gulp.src(RS_CONF.path.htmlDir)
+  gulp.src("./app/markups/*.jade")
     .pipe(wiredep({
       directory: RS_CONF.path.bowerDir,
-      overrides: {
-        "qtip2": {
-          "main": ["./jquery.qtip.min.js", "./jquery.qtip.min.css"],
-          "dependencies": {
-            "jquery": ">=1.6.0"
-          }
-        },
-        "bootstrap-sass": {
-          "main": [
-            // "./assets/javascripts/bootstrap/collapse.js",
-            // "./assets/javascripts/bootstrap/transition.js",
-            // "./assets/javascripts/bootstrap/scrollspy.js",
-            // "./assets/javascripts/bootstrap/modal.js",
-            // "./assets/javascripts/bootstrap/tooltip.js"
-          ]  // подключение bootstrap js в html
-        },
-        "formstone": {
-          "main": [
-            // "./dist/js/core.js",
-            // "./dist/js/number.js",
-            // "./dist/css/number.css",
-          ]
-        },
-        "jquery.inputmask": {
-          "main": [
-            // "./dist/inputmask/inputmask.js",
-            // "./dist/inputmask/inputmask.extensions.js",
-            // "./dist/inputmask/jquery.inputmask.js",
-          ]
-        },
-        "select2": {
-          "main": [
-            // "dist/js/select2.js",
-            // "dist/css/select2.css"
-          ],
-        }
-      },
+      // jade: {
+      //   block: /(([ \t]*)\/\/\s*bower:*(\S*))(\n|\r|.)*?(\/\/\s*endbower)/gi,
+      //   detect: {
+      //     js: /script\(.*src=['"]([^'"]+)/gi,
+      //     css: /link\(.*href=['"]([^'"]+)/gi
+      //   },
+      //   replace: {
+      //     js: 'script(src=\'{{filePath}}\')',
+      //     css: 'link(rel=\'stylesheet\', href=\'{{filePath}}\')'
+      //   }
+      // },
+      // overrides: {
+      //   "qtip2": {
+      //     "main": ["./jquery.qtip.min.js", "./jquery.qtip.min.css"],
+      //     "dependencies": {
+      //       "jquery": ">=1.6.0"
+      //     }
+      //   },
+      //   "bootstrap-sass": {
+      //     "main": [
+      //       // "./assets/javascripts/bootstrap/collapse.js",
+      //       // "./assets/javascripts/bootstrap/transition.js",
+      //       // "./assets/javascripts/bootstrap/scrollspy.js",
+      //       "./assets/javascripts/bootstrap/modal.js",
+      //       // "./assets/javascripts/bootstrap/tooltip.js"
+      //     ]  // подключение bootstrap js в html
+      //   },
+      //   "formstone": {
+      //     "main": [
+      //       // "./dist/js/core.js",
+      //       // "./dist/js/number.js",
+      //       // "./dist/css/number.css",
+      //     ]
+      //   },
+      //   "jquery.inputmask": {
+      //     "main": [
+      //       // "./dist/inputmask/inputmask.js",
+      //       // "./dist/inputmask/inputmask.extensions.js",
+      //       // "./dist/inputmask/jquery.inputmask.js",
+      //     ]
+      //   },
+      //   "select2": {
+      //     "main": [
+      //       // "dist/js/select2.js",
+      //       // "dist/css/select2.css"
+      //     ],
+      //   }
+      // },
       exclude: ["bower/modernizr/", "bower/normalize-css"],  //если надо включить модернизр удали его от сюда
       ignorePath: /^(\.\.\/)*\.\./
     }))
-    .pipe(gulp.dest(RS_CONF.path.baseDir));
+    .pipe(gulp.dest("./app/markups"));
 });
 
 // spritesmith
