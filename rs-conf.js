@@ -26,7 +26,9 @@
 	    jadeLocation: baseDir + "/markups/**/*.jade",
 	    jadeCompiled: baseDir + "/markups/_pages/*.jade",
 	    jadeDestination: baseDir,
-	    jadeMain: baseDir + "/markups/main.jade",
+	    jadeMain: baseDir + "/markups/_templates/main.jade",
+      jadeWiredepSrc: baseDir + "/markups/_templates/*.jade",
+      jadeWiredepDist: baseDir + "/markups/_templates",
 	    compassConfig: "config.rb",
       // Dist
       distDir: distBaseDir,

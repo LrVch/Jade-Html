@@ -96,7 +96,7 @@ gulp.task('autoprefixer', function () {
 // wiredep
 // ******************************************************
 gulp.task("wiredep-bower", function () {
-  gulp.src("./app/markups/_templates/*.jade")
+  gulp.src(RS_CONF.path.jadeWiredepSrc)
     .pipe(wiredep({
       directory: RS_CONF.path.bowerDir,
       overrides: {
@@ -139,7 +139,7 @@ gulp.task("wiredep-bower", function () {
       exclude: ["bower/modernizr/", "bower/normalize-css"],  //если надо включить модернизр удали его от сюда
       ignorePath: /^(\.\.\/)*\.\./
     }))
-    .pipe(gulp.dest("./app/markups/_templates"));
+    .pipe(gulp.dest(RS_CONF.path.jadeWiredepDist));
 });
 
 // spritesmith
