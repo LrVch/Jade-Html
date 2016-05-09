@@ -39,7 +39,9 @@ var gulp = require("gulp"),
 // bootlint
 // ******************************************************
 gulp.task('bootlint', function() {
+  //console.log(file);
 
+  // gulp.src(RS_CONF.path.htmlDir)
   gulp.src(RS_CONF.path.htmlDir)
     .pipe(bootlint({
         //stoponerror: true,
@@ -206,13 +208,21 @@ gulp.task('inject-svg-inline', function () {
     .src('./app/*.html')
     .pipe(inject(sources, { transform: fileContents }))
     .pipe(gulp.dest('./app'))
-    .pipe(browserSync.stream());
+    .pipe(browserSync.stream({once: true}));
 
 });
 
 // reload-after-inject-svg-inline
 // ******************************************************
 gulp.task('reload-after-inject-svg-inline', ['inject-svg-inline'], browserSync.reload);
+
+
+// browserSync.watch(RS_CONF.path.htmlDir, function (event, file) {
+//     if (event === "change") {
+//         gulp.start("inject-svg-inline");
+//         //browserSync.reload();
+//     }
+// });
 
 // browsersync front-end
 // ******************************************************
@@ -231,7 +241,7 @@ gulp.task("server", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootli
   gulp.watch(RS_CONF.path.jadeLocation, ["jade"]);
   gulp.watch(RS_CONF.path.scssDir, ["compass"]);
   gulp.watch(RS_CONF.path.cssDir, ["autoprefixer"]).on("change", browserSync.reload);
-  gulp.watch(RS_CONF.path.htmlDir, ["bootlint", "reload-after-inject-svg-inline"]);
+  gulp.watch(RS_CONF.path.htmlDir, ["bootlint"]).on("change", browserSync.reload);
   gulp.watch(RS_CONF.path.jsDir).on("change", browserSync.reload);
 });
 
