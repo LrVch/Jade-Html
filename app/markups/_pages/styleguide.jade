@@ -1,0 +1,20 @@
+extends ../_templates/main
+
+
+block title
+  | styleguide
+  //- var body_bg = "bg-style";
+
+
+block content
+  | title
+  a(href="#")
+    i(data-icon="telephone").icon-svg
+      svg.icon-svg__svg
+        use(xlink:href="#telephone")
+  a(href="#")
+    h1 title
+      i(data-icon="telephone").icon-svg
+        svg.icon-svg__svg
+          use(xlink:href="#В--hover")
+

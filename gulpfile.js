@@ -29,9 +29,12 @@ var gulp = require("gulp"),
   inject = require('gulp-inject');
 
 
+
+
 // * ====================================================== *
 //   DEV
 // * ====================================================== *
+
 
 // bootlint
 // ******************************************************
@@ -207,11 +210,9 @@ gulp.task('inject-svg-inline', function () {
 
 });
 
-
-// reload-after-html-changed
+// reload-after-inject-svg-inline
 // ******************************************************
 gulp.task('reload-after-inject-svg-inline', ['inject-svg-inline'], browserSync.reload);
-
 
 // browsersync front-end
 // ******************************************************
@@ -231,13 +232,12 @@ gulp.task("server", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootli
   gulp.watch(RS_CONF.path.scssDir, ["compass"]);
   gulp.watch(RS_CONF.path.cssDir, ["autoprefixer"]).on("change", browserSync.reload);
   gulp.watch(RS_CONF.path.htmlDir, ["bootlint", "reload-after-inject-svg-inline"]);
-  // gulp.watch(RS_CONF.path.htmlDir, ["bootlint", "reload-after-html-changed"]).on("change", browserSync.reload);
   gulp.watch(RS_CONF.path.jsDir).on("change", browserSync.reload);
 });
 
 // browsersync local-host
 // ******************************************************
-gulp.task("local-host", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootlint"], function () {
+gulp.task("local-host", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootlint", "inject-svg-inline"], function () {
 
   browserSync.init({
     proxy: "projectName/app"
@@ -247,7 +247,7 @@ gulp.task("local-host", ["compass", "wiredep-bower", "autoprefixer", "jade", "bo
   gulp.watch(RS_CONF.path.jadeLocation, ["jade"]);
   gulp.watch(RS_CONF.path.scssDir, ["compass"]);
   gulp.watch(RS_CONF.path.cssDir, ["autoprefixer"]).on("change", browserSync.reload);
-  gulp.watch(RS_CONF.path.htmlDir, ["bootlint"]).on("change", browserSync.reload);
+  gulp.watch(RS_CONF.path.htmlDir, ["bootlint", "reload-after-inject-svg-inline"]);
   gulp.watch(RS_CONF.path.jsDir).on("change", browserSync.reload);
 });
 
@@ -270,6 +270,8 @@ var log = function (error) {
     ].join("\n"));
   this.end();
 }
+
+
 
 
 // * ====================================================== *
@@ -373,6 +375,8 @@ gulp.task("build", ["clean-dist", "wiredep-bower"], function () {
 });
 
 
+
+
 // * ====================================================== *
 //   DEPLOY
 // * ====================================================== *
@@ -395,7 +399,6 @@ gulp.task("deploy", function () {
     })
     .pipe(conn.dest(RS_CONF.conn.folder));
 });
-
 
 
 
