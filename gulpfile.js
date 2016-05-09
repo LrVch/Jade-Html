@@ -1,6 +1,6 @@
 var gulp = require("gulp"),
+  RS_CONF = require('./rs-conf.js'),
   browserSync = require("browser-sync").create(),
-  sass = require('gulp-sass'),
   notify = require('gulp-notify'),
   minifyCss = require('gulp-minify-css'),
   rename = require('gulp-rename'),
@@ -20,14 +20,13 @@ var gulp = require("gulp"),
   compass = require('gulp-compass'),
   jade = require('gulp-jade'),
   plumber = require('gulp-plumber'),
-  spritesmith = require('gulp.spritesmith'),
   // До выхода gulp 4 версии временное решение
   //runSequence = require('run-sequence'),
-  RS_CONF = require('./rs-conf.js'),
   bootlint  = require('gulp-bootlint'),
-  Promise = require('es6-promise').Promise,
+  //Promise = require('es6-promise').Promise,
   replace = require('gulp-replace'),
-  svgSprite = require('gulp-svg-sprite');
+  svgSprite = require('gulp-svg-sprite'),
+  inject = require('gulp-inject');
 
 
 // * ====================================================== *
@@ -167,9 +166,15 @@ gulp.task('compass', function () {
     }));
 });
 
-// svg-sprite
-gulp.task('svg-sprite', function () {
-  return gulp.src(RS_CONF.path.iconsSvgDir)
+// inline-svg-inject
+// ******************************************************
+gulp.task('inject-svg-inline', function () {
+
+  function fileContents (filePath, file, i, length) {
+    return file.contents.toString('utf8');
+  }
+
+  var sources = gulp.src(RS_CONF.path.iconsSvgDir)
     .pipe(svgSprite({
       mode: {
         symbol: true
@@ -192,17 +197,28 @@ gulp.task('svg-sprite', function () {
           }
         }]
       }
-    }))
-    .pipe(rename('icons-sprite-svg/sprite.svg'))
-    .pipe(gulp.dest(RS_CONF.path.imgDestDir));
+    }));
+
+  return gulp
+    .src('./app/*.html')
+    .pipe(inject(sources, { transform: fileContents }))
+    .pipe(gulp.dest('./app'))
+    .pipe(browserSync.stream());
+
 });
+
+
+// reload-after-html-changed
+// ******************************************************
+gulp.task('reload-after-inject-svg-inline', ['inject-svg-inline'], browserSync.reload);
+
 
 // browsersync front-end
 // ******************************************************
-gulp.task("server", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootlint"], function () {
+gulp.task("server", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootlint", "inject-svg-inline"], function () {
 
   browserSync.init({
-    port: 9000,
+    port: 3000,
     open: false,
     notify: false,
     server: {
@@ -214,7 +230,8 @@ gulp.task("server", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootli
   gulp.watch(RS_CONF.path.jadeLocation, ["jade"]);
   gulp.watch(RS_CONF.path.scssDir, ["compass"]);
   gulp.watch(RS_CONF.path.cssDir, ["autoprefixer"]).on("change", browserSync.reload);
-  gulp.watch(RS_CONF.path.htmlDir, ["bootlint"]).on("change", browserSync.reload);
+  gulp.watch(RS_CONF.path.htmlDir, ["bootlint", "reload-after-inject-svg-inline"]);
+  // gulp.watch(RS_CONF.path.htmlDir, ["bootlint", "reload-after-html-changed"]).on("change", browserSync.reload);
   gulp.watch(RS_CONF.path.jsDir).on("change", browserSync.reload);
 });
 
@@ -351,9 +368,6 @@ gulp.task("dist", ["useref", "images", "fonts", "bootstrapFonts", "extras", "php
 
 // Собираем папку DIST - только когда файлы готовы
 // ******************************************************
-/*gulp.task("build", ["clean-dist"], function () {
-  gulp.start("dist");
-});*/
 gulp.task("build", ["clean-dist", "wiredep-bower"], function () {
   gulp.start("dist");  // с wiredep-bower
 });
