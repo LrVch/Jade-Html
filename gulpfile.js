@@ -26,7 +26,8 @@ var gulp = require("gulp"),
   RS_CONF = require('./rs-conf.js'),
   bootlint  = require('gulp-bootlint'),
   Promise = require('es6-promise').Promise,
-  replace = require('gulp-replace');
+  replace = require('gulp-replace'),
+  svgSprite = require('gulp-svg-sprite');
 
 
 // * ====================================================== *
@@ -70,16 +71,6 @@ gulp.task('bootlint', function() {
       },
       title: "Bootlint"
     }));
-});
-
-// sass
-// ******************************************************
-gulp.task("sass", function () {
-  return gulp.src(RS_CONF.path.scssСonnect)
-    .pipe(sass())
-    .pipe(gulp.dest(RS_CONF.path.cssDirDest))
-    .pipe(browserSync.stream())
-    .pipe(notify("Scss"));
 });
 
 // autoprefixer
@@ -142,26 +133,6 @@ gulp.task("wiredep-bower", function () {
     .pipe(gulp.dest(RS_CONF.path.jadeWiredepDist));
 });
 
-// spritesmith
-// ******************************************************
-gulp.task('sprite', function () {
-  var spriteData = gulp.src(RS_CONF.path.spriteDir)
-    .pipe(spritesmith({
-      imgName: 'sprite.png',
-      cssName: '_sprite.scss',
-      cssFormat: 'scss',
-      padding: 10,
-      algorithm: 'top-down'
-        //cssTemplate: './custom.scss.template.handlebars',
-        //cssVarMap: function (sprite) {
-        //  sprite.name = 's-' + sprite.name
-        //}
-    }));
-  //spriteData.img.pipe(gulp.dest(path.src.srcImg()));
-  //spriteData.css.pipe(gulp.dest(path.src.scss() + "utilities/"));
-  return spriteData.pipe(gulp.dest(RS_CONF.path.imgDestDir));
-});
-
 // jade
 // ******************************************************
 gulp.task('jade', function () {
@@ -196,6 +167,36 @@ gulp.task('compass', function () {
     }));
 });
 
+// svg-sprite
+gulp.task('svg-sprite', function () {
+  return gulp.src(RS_CONF.path.iconsSvgDir)
+    .pipe(svgSprite({
+      mode: {
+        symbol: true
+      },
+      shape: {
+        transform: [{
+          svgo: {
+            plugins: [
+              {convertShapeToPath: true},
+              {convertPathData: true},
+              {mergePaths: true},
+              {convertTransform: true},
+              {removeUnusedNS: true},
+              {cleanupIDs: true},
+              {cleanupNumericValues: true},
+              {removeUselessStrokeAndFill: true},
+              {removeHiddenElems: true},
+              {removeDoctype: false}
+            ]
+          }
+        }]
+      }
+    }))
+    .pipe(rename('icons-sprite-svg/sprite.svg'))
+    .pipe(gulp.dest(RS_CONF.path.imgDestDir));
+});
+
 // browsersync front-end
 // ******************************************************
 gulp.task("server", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootlint"], function () {
@@ -209,8 +210,7 @@ gulp.task("server", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootli
     }
   });
 
-  //gulp.watch(RS_CONF.path.scssDir, ["sass"]);
-  gulp.watch("bower.json", ["wiredep-bower"]); // пока не используется
+  gulp.watch("bower.json", ["wiredep-bower"]);
   gulp.watch(RS_CONF.path.jadeLocation, ["jade"]);
   gulp.watch(RS_CONF.path.scssDir, ["compass"]);
   gulp.watch(RS_CONF.path.cssDir, ["autoprefixer"]).on("change", browserSync.reload);
@@ -226,8 +226,7 @@ gulp.task("local-host", ["compass", "wiredep-bower", "autoprefixer", "jade", "bo
     proxy: "projectName/app"
   });
 
-  //gulp.watch(RS_CONF.path.scssDir, ["sass"]);
-  gulp.watch("bower.json", ["wiredep-bower"]);  // пока не используется
+  gulp.watch("bower.json", ["wiredep-bower"]);
   gulp.watch(RS_CONF.path.jadeLocation, ["jade"]);
   gulp.watch(RS_CONF.path.scssDir, ["compass"]);
   gulp.watch(RS_CONF.path.cssDir, ["autoprefixer"]).on("change", browserSync.reload);
