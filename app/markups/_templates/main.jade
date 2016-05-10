@@ -81,12 +81,16 @@ html.no-js
 
 
     //- scripts
+
     // build:js js/vendor.min.js 
     // bower:js
     script(src='/bower/jquery/dist/jquery.js')
+    script(src='/bower/svg-sprite-injector/svg-sprite-injector.js')
     // endbower
     // endbuild 
 
+
     // build:js js/script.min.js 
+    script(src="js/load.js")
     script(src="js/script.js")
     // endbuild 

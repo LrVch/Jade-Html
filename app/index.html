@@ -35,7 +35,10 @@
 		<!--[if lt IE 9]>
 		<p class="browsehappy">Ваш браузер <strong>устарел</strong>. Пожалуйста <a href="http://browserhappy.com/" target="_blank">обновите </a>его</p><![endif]-->
 		<!-- herosection-->
-		<div class="herosection"></div>
+		<div class="herosection">title<a href="#"><i data-icon="telephone" class="icon-svg">
+					<svg class="icon-svg__svg">
+						<use xlink:href="#telephone"></use>
+					</svg></i></a></div>
 		<!-- END herosection-->
 		
 		<!-- wrapper-->
@@ -59,11 +62,14 @@
 		<!-- END wrapper-->
 		
 		<!-- build:js js/vendor.min.js -->
-		<!-- bower:js-->
+		<!-- bower:js -->
 		<script src="/bower/jquery/dist/jquery.js"></script>
+		<script src="/bower/svg-sprite-injector/svg-sprite-injector.js"></script>
 		<!-- endbower-->
 		<!-- endbuild -->
+		
 		<!-- build:js js/script.min.js -->
+		<script src="js/load.js"></script>
 		<script src="js/script.js"></script>
 		<!-- endbuild -->
 	</body>

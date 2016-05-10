@@ -171,15 +171,10 @@ gulp.task('compass', function () {
     }));
 });
 
-// inline-svg-inject
+// create-svg-inline
 // ******************************************************
-gulp.task('inject-svg-inline', function () {
-
-  function fileContents (filePath, file, i, length) {
-    return file.contents.toString('utf8');
-  }
-
-  var sources = gulp.src(RS_CONF.path.iconsSvgDir)
+gulp.task('create-svg-inline', function () {
+  return gulp.src(RS_CONF.path.iconsSvgDir)
     .pipe(svgSprite({
       mode: {
         symbol: true
@@ -202,31 +197,14 @@ gulp.task('inject-svg-inline', function () {
           }
         }]
       }
-    }));
-
-  return gulp
-    .src('./app/*.html')
-    .pipe(inject(sources, { transform: fileContents }))
-    .pipe(gulp.dest('./app'))
-    .pipe(browserSync.stream({once: true}));
-
+    }))
+    .pipe(rename('sprite-inline.svg'))
+    .pipe(gulp.dest(RS_CONF.path.imgDestDir));
 });
-
-// reload-after-inject-svg-inline
-// ******************************************************
-gulp.task('reload-after-inject-svg-inline', ['inject-svg-inline'], browserSync.reload);
-
-
-// browserSync.watch(RS_CONF.path.htmlDir, function (event, file) {
-//     if (event === "change") {
-//         gulp.start("inject-svg-inline");
-//         //browserSync.reload();
-//     }
-// });
 
 // browsersync front-end
 // ******************************************************
-gulp.task("server", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootlint", "inject-svg-inline"], function () {
+gulp.task("server", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootlint", "create-svg-inline"], function () {
 
   browserSync.init({
     port: 3000,
@@ -241,13 +219,13 @@ gulp.task("server", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootli
   gulp.watch(RS_CONF.path.jadeLocation, ["jade"]);
   gulp.watch(RS_CONF.path.scssDir, ["compass"]);
   gulp.watch(RS_CONF.path.cssDir, ["autoprefixer"]).on("change", browserSync.reload);
-  gulp.watch(RS_CONF.path.htmlDir, ["bootlint"]).on("change", browserSync.reload);
+  gulp.watch(RS_CONF.path.htmlDir, ["bootlint", "create-svg-inline"]).on("change", browserSync.reload);
   gulp.watch(RS_CONF.path.jsDir).on("change", browserSync.reload);
 });
 
 // browsersync local-host
 // ******************************************************
-gulp.task("local-host", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootlint", "inject-svg-inline"], function () {
+gulp.task("local-host", ["compass", "wiredep-bower", "autoprefixer", "jade", "bootlint", "create-svg-inline"], function () {
 
   browserSync.init({
     proxy: "projectName/app"
@@ -257,7 +235,7 @@ gulp.task("local-host", ["compass", "wiredep-bower", "autoprefixer", "jade", "bo
   gulp.watch(RS_CONF.path.jadeLocation, ["jade"]);
   gulp.watch(RS_CONF.path.scssDir, ["compass"]);
   gulp.watch(RS_CONF.path.cssDir, ["autoprefixer"]).on("change", browserSync.reload);
-  gulp.watch(RS_CONF.path.htmlDir, ["bootlint", "reload-after-inject-svg-inline"]);
+  gulp.watch(RS_CONF.path.htmlDir, ["bootlint", "create-svg-inline"]).on("change", browserSync.reload);
   gulp.watch(RS_CONF.path.jsDir).on("change", browserSync.reload);
 });
 
@@ -292,6 +270,8 @@ var log = function (error) {
 // Переносим CSS JS HTML в папку DIST (useref)
 // ******************************************************
 gulp.task("useref", function () {
+  var condition = 'load.js';
+
   return gulp.src(RS_CONF.path.htmlDir)
     .pipe(useref())
     .pipe(gulpif("*.js", uglify()))
@@ -301,23 +281,52 @@ gulp.task("useref", function () {
     .pipe(gulp.dest(RS_CONF.path.distDir));
 });
 
+// инжект svg спрайта в html
+// ******************************************************
+gulp.task('inject-svg-inline', function () {
+
+  function fileContents (filePath, file, i, length) {
+    return file.contents.toString('utf8');
+  }
+
+  var sources = gulp.src(RS_CONF.path.iconsSvgDir)
+    .pipe(svgSprite({
+      mode: {
+        symbol: true
+      },
+      shape: {
+        transform: [{
+          svgo: {
+            plugins: [
+              {convertShapeToPath: true},
+              {convertPathData: true},
+              {mergePaths: true},
+              {convertTransform: true},
+              {removeUnusedNS: true},
+              {cleanupIDs: true},
+              {cleanupNumericValues: true},
+              {removeUselessStrokeAndFill: true},
+              {removeHiddenElems: true},
+              {removeDoctype: false}
+            ]
+          }
+        }]
+      }
+    }));
+
+  return gulp
+    .src(RS_CONF.path.distDir + '/*.html')
+    .pipe(inject(sources, { transform: fileContents }))
+    .pipe(gulp.dest(RS_CONF.path.distDir))
+    // .pipe(browserSync.stream({once: true}));
+    .pipe(browserSync.stream());
+
+});
+
 // Очищаем директорию DIST
 // ******************************************************
 gulp.task("clean-dist", function () {
   return del(RS_CONF.path.distDelDir);
-});
-
-// Запускаем локальный сервер для DIST
-// ******************************************************
-gulp.task("dist-server", function () {
-  browserSync.init({
-    port: 2000,
-    open: false,
-    notify: false,
-    server: {
-      baseDir: RS_CONF.path.distDir
-    }
-  });
 });
 
 // Перенос шрифтов
@@ -340,11 +349,11 @@ gulp.task("bootstrapFonts", function () {
 // ******************************************************
 gulp.task("images", function () {
   return gulp.src(RS_CONF.path.imgDir)
-    .pipe(imagemin({
+    .pipe(gulpif(["*.jpg", "*.jpeg", "*.png", "*.webp", "*.gif"], imagemin({
       progressive: true,
       interlaced: true
-    }))
-    .pipe(filter(["*.jpg", "*.svg", "*.jpeg", "*.png", "*.webp", "*.gif", "!/icons"]))
+    })))
+    .pipe(filter(["*.jpg", "*.svg", "*.jpeg", "*.png", "*.webp", "*.gif", "!/icons", "!/icons-svg-for-inline"]))
     .pipe(gulp.dest(RS_CONF.path.distImgDir));
 });
 
@@ -373,6 +382,8 @@ gulp.task("size-app", function () {
 // Сборка и вывод размера папки DIST
 // ******************************************************
 gulp.task("dist", ["useref", "images", "fonts", "bootstrapFonts", "extras", "php", "size-app"], function () {
+  // gulp.start("inject-svg-inline");  // инжект спрайта  в html при сборке build(если надо чтоб спрайт был в html)
+
   return gulp.src(RS_CONF.path.allDistFiles).pipe(size({
     title: "DIST size: "
   }));
@@ -382,6 +393,19 @@ gulp.task("dist", ["useref", "images", "fonts", "bootstrapFonts", "extras", "php
 // ******************************************************
 gulp.task("build", ["clean-dist", "wiredep-bower"], function () {
   gulp.start("dist");  // с wiredep-bower
+});
+
+// Запускаем локальный сервер для DIST
+// ******************************************************
+gulp.task("dist-server", function () {
+  browserSync.init({
+    port: 2000,
+    open: true,
+    notify: false,
+    server: {
+      baseDir: RS_CONF.path.distDir
+    }
+  });
 });
 
 

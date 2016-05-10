@@ -19,7 +19,7 @@
       bootstrapFontsDir: baseDir + "/fonts/bootstrap/*",
       imgDir: baseDir + "/img/**/*",
       imgDestDir: baseDir + "/img/",
-      iconsSvgDir: baseDir + "/img/icons-svg/*.svg",
+      iconsSvgDir: baseDir + "/img/icons-svg-for-inline/*.svg",
       bowerDir: baseDir + "/bower",
       iconDir: baseDir + "/img/",
       extraFiles: [baseDir + "/*.*", "!" + baseDir + "/*.html"],
