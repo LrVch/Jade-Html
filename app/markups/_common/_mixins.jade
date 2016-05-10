@@ -1,3 +1,8 @@
+
+- function names(arrNames) {
+-  return ((arrNames != undefined && arrNames !== "") ? arrNames.join(' ') : "" );
+- }
+
 //- социальные иконки
 //- +socials('social', {vk:'в контакте', fb:'фэйсбук', tw:'твиттер'})
 mixin socials(className, items)
@@ -98,3 +103,12 @@ mixin oldBrowser
     a(href="http://browserhappy.com/" target="_blank") обновите 
     | его
   <![endif]-->
+
+//- icon svg
+//- icon-svg("iconName", "customClass", ["red", "blue", "green"])
+mixin icon-svg(iconName, blockClass, arrNames, content)
+  a(href="#" class= ((blockClass != undefined) ? blockClass : "") + " " +  names(arrNames))
+    span(class= ((blockClass != undefined && blockClass != "") ? blockClass + "__span" : ""))= content
+    i(data-icon= iconName  class="icon-svg " + ((blockClass != undefined  && blockClass != "") ? blockClass + "__icon" : ""))
+      svg(class="icon-svg__svg " + ((blockClass != undefined && blockClass != "") ? blockClass + "__svg" : ""))
+        use(xlink:href="#" + iconName)
