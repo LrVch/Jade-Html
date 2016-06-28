@@ -2,16 +2,15 @@ var gulp = require("gulp"),
   RS_CONF = require('./rs-conf.js'),
   browserSync = require("browser-sync").create(),
   notify = require('gulp-notify'),
-  minifyCss = require('gulp-minify-css'),
+  // minifyCss = require('gulp-minify-css'),
+  cleanCSS = require('gulp-clean-css'),
   rename = require('gulp-rename'),
   autoprefixer = require('gulp-autoprefixer'),
   del = require("del"),
   gutil = require("gulp-util"),
-  concatCss = require("gulp-concat-css"),
   gulpif = require("gulp-if"),
   uglify = require("gulp-uglify"),
   imagemin = require("gulp-imagemin"),
-  uncss = require('gulp-uncss'),
   filter = require("gulp-filter"),
   ftp = require("vinyl-ftp"),
   wiredep = require("wiredep").stream,
@@ -275,13 +274,13 @@ gulp.task("useref", function () {
   return gulp.src(RS_CONF.path.htmlDir)
     .pipe(useref())
     .pipe(gulpif("*.js", uglify()))
-    .pipe(gulpif("*.css", minifyCss({
+    .pipe(gulpif("*.css", cleanCSS({
        compatibility: "ie8"
      })))
     .pipe(gulp.dest(RS_CONF.path.distDir));
 });
 
-// инжект svg спрайта в html
+// инжект svg спрайта в html // инжект спрайта  в html при сборке build(если надо чтоб спрайт был в html)
 // ******************************************************
 gulp.task('inject-svg-inline', function () {
 
@@ -435,18 +434,3 @@ gulp.task("deploy", function () {
 });
 
 
-
-
-// * ====================================================== *
-//   Резерв
-// * ====================================================== *
-
-// uncss неработает пока
-// ******************************************************
-gulp.task('uncss', function () {
-  return gulp.src('app/css/style.min.css')
-    .pipe(uncss({
-      html: ['app/**/*.html']
-    }))
-    .pipe(gulp.dest('app/css/style.min.css'));
-});
